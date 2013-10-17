@@ -1,4 +1,4 @@
-﻿# https://tools.ietf.org/html/rfc1459
+# https://tools.ietf.org/html/rfc1459
 # http://wiki.shellium.org/w/Writing_an_IRC_bot_in_Python
 # http://forum.codecall.net/topic/59608-developing-a-basic-irc-bot-with-python/
 # http://docs.python.org/2/library/ssl.html
@@ -53,8 +53,7 @@ import s4chan
 
 # Some basic variables used to configure the bot
 
-server = "boxxybabee.catiechat.net" # EU server
-#server = "anewhopeee.catiechat.net" # US server
+server = "irc.catiechat.net"
 port = 6667 # default port
 ssl_port = 6697 # ssl port
 chans = ["#test", "#music", "#boxxy", "#IdleRPG", "#boxxy-nsfw"] #default channels
