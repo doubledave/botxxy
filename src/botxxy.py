@@ -56,7 +56,7 @@ import s4chan
 server = "irc.catiechat.net"
 port = 6667 # default port
 ssl_port = 6697 # ssl port
-chans = ["#test", "#music", "#boxxy", "#IdleRPG", "#boxxy-nsfw"] #default channels
+chans = ["#test", "#music", "#boxxy", "#IdleRPG", "#nsfw"] #default channels
 botnick = "botxxy" # bot nick
 botuser = "I"
 bothost = "m.botxxy.you.see"
