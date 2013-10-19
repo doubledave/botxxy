@@ -11,7 +11,10 @@ def s4Chan(board, search):
     for j in i['threads']:
       if search.lower() in j.get('sub', '').lower() or search.lower() in j.get('com', '').lower():
         subject = j.get('sub', 'Empty subject')
-        post = p.unescape(j.get('com', 'Empty post')).replace('<br>', ' ')
+        post = p.unescape(j.get('com', 'Empty post'))
+        post = post.replace('<br>', ' ')
+        post = post.replace('<span class="quote">','')
+        post = post.replace('</span>','')
 
         if len(post) > 300:
           post = post[0:300]
