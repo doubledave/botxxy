@@ -1327,7 +1327,7 @@ def gSearch(msg):
         if res:
           string = ''
           
-          for i in res:
+          for i in res[0:3]:
             title = i['title'].replace("<b>","").replace("</b>", "")
             title = hp.unescape(title)
             url = i['url']
