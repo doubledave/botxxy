@@ -20,7 +20,7 @@ def s4Chan(board, search):
           post = post[0:300]
           post = post + '...' #close color here also
 
-        text = '%s /%s/ %s | %s | %s (R:%s, I:%s)' % (logo, board, subject, post, 'https://4chan.org/%s/res/%s' % (board, j['no']), j['replies'], j['images'])
+        text = '%s /%s/ %s | %s | %s (R:%s, I:%s)' % (logo, board, subject, post, 'https://boards.4chan.org/%s/res/%s' % (board, j['no']), j['replies'], j['images'])
         res.append(text)
   return res
 
