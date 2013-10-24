@@ -188,77 +188,106 @@ def idleRPG():
 
 def loadAuth():
   global authDB
-  authDB = [line.strip() for line in open('auth.txt', 'r')]
-  myprint("Auth -> LOADED")
+  try:
+    authDB = [line.strip() for line in open('auth.txt', 'r')]
+    myprint("Auth -> Loaded")
+  except IOError as e:
+    myprint("Auth -> FAIL | %s" % e)
 
 # Ignores
   
 def loadIgn():
   global ignUsrs
-  ignUsrs = [line.strip() for line in open('ign.txt', 'r')]
-  myprint("Ign -> %s" % (str(ignUsrs)))
+  try:
+    ignUsrs = [line.strip() for line in open('ign.txt', 'r')]
+    myprint("Ign -> %s" % ignUsrs)
+  except IOError as e:
+    myprint("Ign -> FAIL | %s" % e)
   
 # Greets
 
 def loadGreets():
   global greets
-  greets = [line.strip() for line in open('greet.txt', 'r')]
-  myprint("Greets -> LOADED")
-  
+  try:
+    greets = [line.strip() for line in open('greet.txt', 'r')]
+    myprint("Greets -> LOADED")
+  except IOError as e:
+    myprint("Greets -> FAIL | %s" % e)
 # Parts
   
 def loadParts():
   global parts
-  parts = [line.strip() for line in open('part.txt', 'r')]
-  myprint("Parts -> LOADED")
+  try:
+    parts = [line.strip() for line in open('part.txt', 'r')]
+    myprint("Parts -> LOADED")
+  except IOError as e:
+    myprint("Parts -> FAIL | %s" % e)
   
 # 8ball
 
 def load8ball():
   global eightball
-  eightball = [line.strip() for line in open('8ball.txt', 'r')]
-  myprint("8ball -> LOADED")
+  try:
+    eightball = [line.strip() for line in open('8ball.txt', 'r')]
+    myprint("8ball -> LOADED")
+  except IOError as e:
+    myprint("8ball -> FAIL | %s" % e)
   
 # Quotes
 
 def loadQuotes():
   global quotes
-  quotes = [line.strip() for line in open('quotes.txt', 'r')]
-  myprint("Quotes -> LOADED")
+  try:
+    quotes = [line.strip() for line in open('quotes.txt', 'r')]
+    myprint("Quotes -> LOADED")
+  except IOError as e:
+    myprint("Quotes -> FAIL | %s" % e)
 
 # Cakes
 
 def loadCakes():
   global cakeDeaths
-  cakeDeaths = [line.strip() for line in open('cake.txt', 'r')]
-  myprint("Cake -> LOADED")
+  try:
+    cakeDeaths = [line.strip() for line in open('cake.txt', 'r')]
+    myprint("Cake -> LOADED")
+  except IOError as e:
+    myprint("Cake -> FAIL | %s" % e)
 
 # Last.fm Users
 
 def loadLfmUsers():
   global lfmUsers
-  lfmUsers = [line.strip() for line in open('lfmusers.txt', 'r')]
-  myprint("LfmUsers -> LOADED")
+  try:
+    lfmUsers = [line.strip() for line in open('lfmusers.txt', 'r')]
+    myprint("LfmUsers -> LOADED")
+  except IOError as e:
+    myprint("LfmUsers -> FAIL | %s" % e)
   
 def loadLfm():
-  lines = [line.strip() for line in open('lfm.txt', 'r')]
-  API_KEY = lines[0]
-  API_SEC = lines[1]
-  global lastfm
-  lastfm = pylast.LastFMNetwork(api_key = API_KEY, api_secret = API_SEC, username = '', password_hash = '')
-  myprint("last.fm interface -> LOADED")
+  try:
+    lines = [line.strip() for line in open('lfm.txt', 'r')]
+    API_KEY = lines[0]
+    API_SEC = lines[1]
+    global lastfm
+    lastfm = pylast.LastFMNetwork(api_key = API_KEY, api_secret = API_SEC, username = '', password_hash = '')
+    myprint("last.fm API -> LOADED")
+  except IOError as e:
+    myprint("last.fm API -> FAIL | %s" % e)
   
 # Twitter API
   
 def loadTwitter():
-  lines = [line.strip() for line in open('twitter.txt', 'r')]
-  CON_KEY = lines[0]
-  CON_SEC = lines[1]
-  ACC_TOK = lines[2]
-  ACC_SEC = lines[3]
-  global t_api
-  t_api = twitter.Api(consumer_key = CON_KEY, consumer_secret = CON_SEC, access_token_key = ACC_TOK, access_token_secret = ACC_SEC)
-  myprint("twitter API -> LOADED")
+  try:
+    lines = [line.strip() for line in open('twitter.txt', 'r')]
+    CON_KEY = lines[0]
+    CON_SEC = lines[1]
+    ACC_TOK = lines[2]
+    ACC_SEC = lines[3]
+    global t_api
+    t_api = twitter.Api(consumer_key = CON_KEY, consumer_secret = CON_SEC, access_token_key = ACC_TOK, access_token_secret = ACC_SEC)
+    myprint("twitter API -> LOADED")
+  except IOError as e:
+    myprint("Twitter API -> FAIL | %s" % e)
   
 def loginToForum():
   global cwf_headers, userAgent
