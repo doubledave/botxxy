@@ -1217,9 +1217,11 @@ def getTweet(msg):
           else:
             
             tweet = tweets[index].GetText()
+            t = int(tweets[index].GetCreatedAtInSeconds())
+            created = time.strftime("Posted %Hh, %Mm, %Ss ago", time.localtime(time.time() - t))
             tweet = hp.unescape(tweet).replace('\n', ' ')
-            myprint("%s %d %s" % (t_user, index, tweet))
-            sendChanMsg(chan, "%s @%s: %s" % (t_logo, t_user, tweet))
+            myprint("%s %d %s %s" % (t_user, index, tweet, created))
+            sendChanMsg(chan, "%s @%s: %s (%s)" % (t_logo, t_user, tweet, created))
         except twitter.TwitterError as e:
           myprint("TwitterError: %s" % (e))
           sendChanMsg(chan, "%s Error: %s" % (t_logo, e))
