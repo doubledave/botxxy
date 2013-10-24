@@ -17,9 +17,10 @@ import ssl
 import hashlib
 import time
 import random
+from mylib import unescape, myprint
 
 # Colors
-from colorama import Fore, init
+from colorama import init
 
 # URL spoiler
 # https://code.google.com/p/httplib2/
@@ -42,7 +43,6 @@ import urllib
 # https://github.com/bear/python-twitter
 # https://github.com/simplegeo/python-oauth2
 import twitter
-import HTMLParser
 
 # Fuck my life
 # http://www.hawkee.com/snippet/9431/
@@ -91,7 +91,6 @@ cakestr_0 = "    _|||||_"
 cakestr_1 = "   {~*~*~*~}"
 cakestr_2 = " __{*~*~*~*}__ "
 cakestr_3 = "`-------------`"
-prompt = ">> "
 
 # Last.fm vars
 
@@ -120,16 +119,12 @@ h = httplib2.Http(disable_ssl_certificate_validation = True, timeout = 10)
 userAgent = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0'
 def_headers = {'user-agent': userAgent}
 cwf_headers = {}
-hp = HTMLParser.HTMLParser()
 
 #4chan vars
 chanLogo = '3::54chan'
 validBoards = []
 
 #============BASIC FUNCTIONS TO MAKE THIS A BIT EASIER===============
-
-def myprint(msg):
-  print "%s%s%s" % (Fore.CYAN, prompt, msg.encode("utf8"))
 
 def ping(reply): # This is our first function! It will respond to server Pings.
   ircsock.send("PONG :%s\n" % (reply)) # In some IRCds it is mandatory to reply to PING the same message we recieve
@@ -175,6 +170,7 @@ def identify(again):
   myprint("Bot identified")
   if again:
     joinChans(chans)
+
 
 #========================END OF BASIC FUNCTIONS=====================
 
@@ -288,6 +284,8 @@ def loadTwitter():
     myprint("twitter API -> LOADED")
   except IOError as e:
     myprint("Twitter API -> FAIL | %s" % e)
+    
+# Catie forum cookie
   
 def loginToForum():
   global cwf_headers, userAgent
@@ -307,10 +305,12 @@ def loginToForum():
       cookie = '%s; %s; %s;' % (cookie_data[12].split(' ')[1], cookie_data[16].split(' ')[1], cookie_data[20].split(' ')[1])
       cwf_headers = {'Cookie':cookie}
       
+# 4chan board list
+
 def loadValidBoards():
   global validBoards
   validBoards = s4chan.getValidBoards()
-  myprint("Valid boards -> %s" % str(validBoards))
+  myprint("Valid boards -> %s" % validBoards)
 
 #========================END OF INITIALIZATIONS=====================
 
@@ -1248,7 +1248,7 @@ def getTweet(msg):
             tweet = tweets[index].GetText()
             t = int(tweets[index].GetCreatedAtInSeconds())
             created = time.strftime("Posted %Hh, %Mm, %Ss ago", time.localtime(time.time() - t))
-            tweet = hp.unescape(tweet).replace('\n', ' ')
+            tweet = unescape(tweet).replace('\n', ' ')
             myprint("%s %d %s %s" % (t_user, index, tweet, created))
             sendChanMsg(chan, "%s @%s: %s (%s)" % (t_logo, t_user, tweet, created))
         except twitter.TwitterError as e:
@@ -1301,7 +1301,7 @@ def urlSpoiler(msg):
             r, data = h.request(url, "GET", headers = def_headers)
             soup = bs4.BeautifulSoup(data)
             url_title = soup.title.string
-            url_title = hp.unescape(url_title).strip().replace('\n', ' ').rstrip(' - YouTube')
+            url_title = unescape(url_title).strip().replace('\n', ' ').rstrip(' - YouTube')
             myprint("Title: %s" % (url_title))
             yt_link = 'https://youtu.be/%s' % re.findall('v\=([a-zA-Z0-9-_=]+)', url)[0]
             myprint (yt_link)
@@ -1311,20 +1311,20 @@ def urlSpoiler(msg):
             r, data = h.request(url, "GET", headers = cwf_headers)
             soup = bs4.BeautifulSoup(data)
             url_title = soup.title.string
-            url_title = hp.unescape(url_title).strip().replace('\n', ' ')
+            url_title = unescape(url_title).strip().replace('\n', ' ')
             if " Login" in url_title:
               loginToForum()
               r, data = h.request(url, "GET", headers = cwf_headers)
               soup = bs4.BeautifulSoup(data)
               url_title = soup.title.string
-              url_title = hp.unescape(url_title).strip().replace('\n', ' ')
+              url_title = unescape(url_title).strip().replace('\n', ' ')
             myprint("Title: %s" % (url_title))
             sendChanMsg(chan, "%s's link title: %s" % (nick, url_title))
           else:
             r, data = h.request(url, "GET", headers = def_headers)
             soup = bs4.BeautifulSoup(data)
             url_title = soup.title.string
-            url_title = hp.unescape(url_title).strip().replace('\n', ' ')
+            url_title = unescape(url_title).strip().replace('\n', ' ')
             myprint("Title: %s" % (url_title))
             sendChanMsg(chan, "%s's link title: %s" % (nick, url_title))
         else:
@@ -1360,7 +1360,7 @@ def gSearch(msg):
           
           for i in res[0:3]:
             title = i['title'].replace("<b>","").replace("</b>", "")
-            title = hp.unescape(title)
+            title = unescape(title)
             url = i['url']
             url = urllib.unquote(url)
             string = "%s ( %s )" % (title, url)
@@ -1389,7 +1389,7 @@ def chanSearch(msg):
         board = args[0]
         sterms = args[1]
         if board in validBoards:
-          res = s4chan.s4Chan(board, sterms)
+          res = s4chan.search(board, sterms)
           if res:
             for i in res[0:3]:
               myprint(i)
