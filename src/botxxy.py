@@ -1303,9 +1303,17 @@ def urlSpoiler(msg):
             url_title = soup.title.string
             url_title = unescape(url_title).strip().replace('\n', ' ').rstrip(' - YouTube')
             myprint("Title: %s" % (url_title))
-            yt_link = 'https://youtu.be/%s' % re.findall('v\=([a-zA-Z0-9-_=]+)', url)[0]
-            myprint (yt_link)
-            sendChanMsg(chan, "%s's link title: %s %s | %s" % (nick, yt_logo, url_title, yt_link))
+            try:
+              yt_link = 'https://youtu.be/%s' % re.findall('v\=([a-zA-Z0-9-_=]+)', url)[0]
+              myprint (yt_link)
+              sendChanMsg(chan, "%s's link title: %s %s | %s" % (nick, yt_logo, url_title, yt_link))
+            except(IndexError):
+              r, data = h.request(url, "GET", headers = def_headers)
+              soup = bs4.BeautifulSoup(data)
+              url_title = soup.title.string
+              url_title = unescape(url_title).strip().replace('\n', ' ')
+              myprint("Title: %s" % (url_title))
+              sendChanMsg(chan, "%s's link title: %s %s" % (nick, yt_logo, url_title))
           elif 'forum.catiewayne.com' in urlparse.urlparse(url)[1]:
             myprint("It's a forum link")
             r, data = h.request(url, "GET", headers = cwf_headers)
