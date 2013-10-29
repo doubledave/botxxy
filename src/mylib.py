@@ -1,7 +1,4 @@
 import re, htmlentitydefs
-from colorama import Fore
-
-prompt = '>> '
 
 def unescape(text):
   def fixup(m):
@@ -25,4 +22,5 @@ def unescape(text):
   return re.sub("&#?\w+;", fixup, text)
 
 def myprint(msg):
-  print "%s%s%s" % (Fore.CYAN, prompt, msg.encode("utf8"))
+  prompt = '>> '
+  print "%s%s" % (prompt, msg)
