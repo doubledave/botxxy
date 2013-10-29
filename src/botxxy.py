@@ -21,7 +21,6 @@ import sys
 
 import mylogger
 sys.stdout = mylogger.Logger()
-sys.stderr = mylogger.Logger()
 
 from mylib import unescape, myprint
 
