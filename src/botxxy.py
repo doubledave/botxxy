@@ -8,7 +8,7 @@
 
 '''
 @author: b0nk
-@version: 1.9
+@version: 2.0
 '''
 
 # Import the necessary libraries.
@@ -17,10 +17,13 @@ import ssl
 import hashlib
 import time
 import random
-from mylib import unescape, myprint
+import sys
 
-# Colors
-from colorama import init
+import mylogger
+sys.stdout = mylogger.Logger()
+sys.stderr = mylogger.Logger()
+
+from mylib import unescape, myprint
 
 # URL spoiler
 # https://code.google.com/p/httplib2/
@@ -56,7 +59,7 @@ import s4chan
 server = "irc.catiechat.net"
 port = 6667 # default port
 ssl_port = 6697 # ssl port
-chans = ["#test", "#music", "#boxxy", "#IdleRPG", "#nsfw"] #default channels
+chans = ["#test", "#music", "#boxxy", "#nsfw"] #default channels
 botnick = "botxxy" # bot nick
 botuser = "I"
 bothost = "m.botxxy.you.see"
@@ -170,15 +173,16 @@ def identify(again):
   myprint("Bot identified")
   if again:
     joinChans(chans)
-
+    
+def resetLog():
+  with open("botlog.log", "w") as f:
+    f.write('')
+    f.close
+  myprint("Log reset!")
 
 #========================END OF BASIC FUNCTIONS=====================
 
 #========================INITIALIZATIONS============================
-
-def idleRPG():
-  ircsock.send("PRIVMSG IdleBot :LOGIN derpbot 123456\n")
-  myprint("Logged in to IdleRPG")
 
 # Authorized
 
@@ -1461,7 +1465,6 @@ def load():
   loginToForum()
   loadValidBoards()
 
-init(autoreset = True)
 # Connection
 load()
 try:
@@ -1475,7 +1478,6 @@ try:
   time.sleep(3)
   joinChans(chans)
   time.sleep(3)
-  idleRPG()
 
   while 1: # This is our infinite loop where we'll wait for commands to show up, the 'break' function will exit the loop and end the program thus killing the bot
     ircmsg = ircsock.recv(1024) # Receive data from the server
@@ -1538,6 +1540,11 @@ try:
       user = getUser(ircmsg)
       if user == "b0nk!~LoC@fake.dimension":
         identify(True)
+        
+    if ":!newlog" in ircmsg:
+      user = getUser(ircmsg)
+      if user == "b0nk!~LoC@fake.dimension":
+        resetLog()
       
     if ":!die" in ircmsg: # checks for !die
       user = getUser(ircmsg)
@@ -1687,5 +1694,4 @@ try:
       hasURL = None
     
 except socket.error as e:
-  print e.strerror
-  myprint("Bot killed / timedout")
+  myprint("Bot killed / timedout (%s)" % e)
