@@ -292,21 +292,24 @@ def loadTwitter():
   
 def loginToForum():
   global cwf_headers, userAgent
-  lines = [line.strip() for line in open('cwf.txt', 'r')]
-  username = lines[0]
-  password = lines[1]
-  
-  loginURL = 'http://forum.catiewayne.com/ucp.php?mode=login'
-  body = {'username': username, 'password': password, 'login': 'Login'}
-  headers = {'content-type': 'application/x-www-form-urlencoded'}
-  
-  r, content = h.request(loginURL, method = "POST", headers = headers, body = urllib.urlencode(body))
-  if r:
-    if r.status is 200:
-      myprint("Logged in to forum")
-      cookie_data = r['set-cookie'].split('; ')
-      cookie = '%s; %s; %s;' % (cookie_data[12].split(' ')[1], cookie_data[16].split(' ')[1], cookie_data[20].split(' ')[1])
-      cwf_headers = {'Cookie':cookie}
+  try:
+    lines = [line.strip() for line in open('cwf.txt', 'r')]
+    username = lines[0]
+    password = lines[1]
+    
+    loginURL = 'http://forum.catiewayne.com/ucp.php?mode=login'
+    body = {'username': username, 'password': password, 'login': 'Login'}
+    headers = {'content-type': 'application/x-www-form-urlencoded'}
+    
+    r, content = h.request(loginURL, method = "POST", headers = headers, body = urllib.urlencode(body))
+    if r:
+      if r.status is 200:
+        myprint("Logged in to forum")
+        cookie_data = r['set-cookie'].split('; ')
+        cookie = '%s; %s; %s;' % (cookie_data[12].split(' ')[1], cookie_data[16].split(' ')[1], cookie_data[20].split(' ')[1])
+        cwf_headers = {'Cookie':cookie}
+  except (IOError) as e:
+    myprint("NOT logged in | %s" % e)
       
 # 4chan board list
 
