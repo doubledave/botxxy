@@ -168,3 +168,4 @@ src/*.txt
 src/*.bat
 .dropbox
 src/test.py
+src/*.log
