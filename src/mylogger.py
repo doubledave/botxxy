@@ -6,6 +6,6 @@ class Logger(object):
     self.log = open("botlog.log", "a", 0)
 
   def write(self, message):
-    self.terminal.write(message.encode('utf8'))
+    self.terminal.write(message)
     t = time.strftime('%H:%M:%S', time.localtime())
-    self.log.write("[%s] %s" % (t, message.encode('utf8')))
+    self.log.write("[%s] %s" % (t, message))
