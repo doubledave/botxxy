@@ -21,7 +21,6 @@ import sys
 
 import mylogger
 sys.stdout = mylogger.Logger()
-sys.stderr = mylogger.Logger()
 
 from mylib import unescape, myprint
 
@@ -1298,10 +1297,8 @@ def urlSpoiler(msg):
     else:
       chan = getChannel(msg)
       url = re.findall(urlpat, msg)[0]
-      
       myprint("Getting title from: %s" % (url))
       try:
-        import HTMLParser.HTMLParseError
         r, data = h.request(url, "HEAD")
         if "text/html" in r['content-type']:
           if 'youtube.com' in urlparse.urlparse(url)[1]:
@@ -1346,7 +1343,7 @@ def urlSpoiler(msg):
         else:
           myprint("%s is of type %s" % (url, r['content-type']))
           
-      except(socket.error, KeyError, AttributeError, httplib2.RedirectLimit, httplib2.ServerNotFoundError, HTMLParser.HTMLParseError) as e:
+      except(socket.error, KeyError, AttributeError, httplib2.RedirectLimit, httplib2.ServerNotFoundError) as e:
         myprint("%s (%s)" % (url, e))
         sendChanMsg(chan, "%s's link error (%s)" % (nick, e))
         
