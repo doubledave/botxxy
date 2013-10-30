@@ -1,11 +1,20 @@
 import sys, time
 
+# sys.stdout.encoding is None when piping to a file.
+encoding = sys.stdout.encoding
+if encoding is None:
+  encoding = sys.getfilesystemencoding()
+
 class Logger(object):
   def __init__(self):
     self.terminal = sys.stdout
     self.log = open("botlog.log", "a", 0)
 
   def write(self, message):
-    self.terminal.write(message)
     t = time.strftime('%H:%M:%S', time.localtime())
-    self.log.write("[%s] %s" % (t, message))
+    try:
+      self.terminal.write(message.encode(encoding, 'replace'))
+      self.log.write("[%s] %s" % (t, message.encode(encoding, 'replace')))
+    except UnicodeDecodeError:
+      self.terminal.write(message)
+      self.log.write("[%s] %s" % (t, message))

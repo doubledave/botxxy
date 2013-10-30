@@ -1,5 +1,10 @@
 import re, htmlentitydefs
 
+# sys.stdout.encoding is None when piping to a file.
+encoding = sys.stdout.encoding
+if encoding is None:
+  encoding = sys.getfilesystemencoding()
+
 def unescape(text):
   def fixup(m):
     text = m.group(0)
@@ -23,4 +28,8 @@ def unescape(text):
 
 def myprint(msg):
   prompt = '>> '
-  print "%s%s" % (prompt, msg)
+  try:
+    print "%s%s" % (prompt, msg.encode(encoding, 'replace'))
+  except UnicodeDecodeError:
+    print "%s%s" % (prompt, msg)
+  
