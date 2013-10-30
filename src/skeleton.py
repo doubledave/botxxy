@@ -2,7 +2,7 @@
 import socket
 import ssl
 import time
-from mylib import myprint
+from mylib import myprint, unescape
 
 # Some basic variables used to configure the bot
 
@@ -62,9 +62,10 @@ def hello(msg): # This function responds to a user that inputs "Hello botxxy"
 ircsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 ircsock = ssl.wrap_socket(ircsock) # SSL wrapper for the socket
 ircsock.connect((server, ssl_port)) # Here we connect to the server using the port defined above
-time.sleep(3)
+time.sleep(2)
 ircsock.send("USER %s %s %s %s\n" % (botuser, bothost, botserver, botname)) # Bot authentication
 ircsock.send("NICK %s\n" % (botnick) ) # Here we actually assign the nick to the bot
+time.sleep(2)
 joinChans(chans)
 
 while 1: # This is our infinite loop where we'll wait for commands to show up, the 'break' function will exit the loop and end the program thus killing the bot
