@@ -1,4 +1,4 @@
-import re, htmlentitydefs
+import re, htmlentitydefs, sys
 
 # sys.stdout.encoding is None when piping to a file.
 encoding = sys.stdout.encoding
