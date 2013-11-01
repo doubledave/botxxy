@@ -1,4 +1,4 @@
-import re, htmlentitydefs, sys
+import re, htmlentitydefs
 
 def unescape(text):
   def fixup(m):

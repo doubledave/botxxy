@@ -38,8 +38,8 @@ import urlparse
 import pylast
 
 # Imports for google search
-import json
 import urllib
+import google
 
 # Imports for feeds
 # Twitter
@@ -1362,29 +1362,42 @@ def gSearch(msg):
       chan = getChannel(msg)
       query = msg.split(":!google")[1].lstrip(' ')
       if query:
-        myprint('Google search for: %s' % (query))
-        sendChanMsg(chan, "%s search: %s" % (g_logo, query))
-        query = urllib.urlencode({ 'q' : query })
-        data = urllib.urlopen(g_baseURL + query).read()
-        json_res = json.loads(data)
-        res = json_res['responseData']['results']
-        
+        myprint('Google web search for: %s' % (query))
+        res = google.webSearch(query)
         if res:
-          string = ''
-          
           for i in res[0:3]:
-            title = i['title'].replace("<b>","").replace("</b>", "")
-            title = unescape(title)
-            url = i['url']
-            url = urllib.unquote(url)
-            string = "%s ( %s )" % (title, url)
-            myprint('Result: %s' % (string))
-            sendChanMsg(chan, "Result: %s" % (string))
+            myprint(i)
+            sendChanMsg(chan, i)
         else:
+          myprint("no results for %s" % query)
           sendChanMsg(chan, "%s no results :(" % (g_logo))
       else:
         myprint("%s used bad arguments for !google" % (nick))
         sendChanMsg(chan, "%s Bad arguments! Usage: !google [search terms]" % (g_logo))
+        
+def gImageSearch(msg):
+  nick = getNick(msg)
+  global ignUsrs
+  if nick not in ignUsrs:
+    if '#' not in msg.split(':')[1]:
+      myprint("%s sent !images outside of a channel" % (nick))
+      sendNickMsg(nick, "You are not in a channel")
+    else:
+      chan = getChannel(msg)
+      query = msg.split(":!images")[1].lstrip(' ')
+      if query:
+        myprint('Google image search for: %s' % (query))
+        res = google.imageSearch(query)
+        if res:
+          for i in res[0:3]:
+            myprint(i)
+            sendChanMsg(chan, i)
+        else:
+          myprint("no results for %s" % query)
+          sendChanMsg(chan, "%s no results :(" % (g_logo))
+      else:
+        myprint("%s used bad arguments for !images" % (nick))
+        sendChanMsg(chan, "%s Bad arguments! Usage: !images [search terms]" % (g_logo))
         
           #4chan search
           
@@ -1681,6 +1694,9 @@ try:
       
     if ":!google" in ircmsg:
       gSearch(ircmsg)
+      
+    if ":!images" in ircmsg:
+      gImageSearch(ircmsg)
       
     if ":!twitter" in ircmsg:
       getTweet(ircmsg)
