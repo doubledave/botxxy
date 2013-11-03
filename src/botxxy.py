@@ -107,7 +107,6 @@ lastfm = None
 
 # Google vars
 g_logo = "12G4o8o12g9l4e"
-g_baseURL = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&"
 
 # Twitter vars
 t_logo = "0,10twitter"
@@ -119,7 +118,7 @@ yt_logo = "0,4You1,0Tube"
 
 # Internet
 h = httplib2.Http(disable_ssl_certificate_validation = True, timeout = 10)
-userAgent = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0'
+userAgent = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0'
 def_headers = {'user-agent': userAgent}
 cwf_headers = {}
 
