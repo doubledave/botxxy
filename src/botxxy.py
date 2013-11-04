@@ -133,11 +133,17 @@ def ping(reply): # This is our first function! It will respond to server Pings.
   #myprint("PONG :%s" % (reply))
 
 def sendChanMsg(chan, msg): # This sends a message to the channel 'chan'
-  ircsock.send("PRIVMSG %s :%s\n" % (chan, msg.encode("utf8")))
+  try:
+    ircsock.send("PRIVMSG %s :%s\n" % (chan, msg.encode("utf8")))
+  except UnicodeDecodeError:
+    ircsock.send("PRIVMSG %s :%s\n" % (chan, msg))
   
 def sendNickMsg(nick, msg): # This sends a notice to the nickname 'nick'
-  ircsock.send("NOTICE %s :%s\n" % (nick, msg.encode("utf8")))
-  
+  try:
+    ircsock.send("NOTICE %s :%s\n" % (nick, msg.encode("utf8")))
+  except UnicodeDecodeError:
+    ircsock.send("NOTICE %s :%s\n" % (nick, msg))
+    
 def getNick(msg): # Returns the nickname of whoever requested a command from a RAW irc privmsg. Example in commentary below.
   # ":b0nk!LoC@fake.dimension PRIVMSG #test :lolmessage"
   return msg.split('!')[0].replace(':','')
@@ -636,8 +642,7 @@ def quoteCmd(msg): #TODO: quote IDs
       if line:
         author = line.split ("|!|")[0]
         quote = line.split ("|!|")[1]
-        myprint("%s" % (author)) #debugging
-        myprint("%s" % (quote)) #debugging
+        myprint("%s | %s" % (author, quote)) #debugging
         sendChanMsg(chan, "[Quote] %s" % (quote))
       else:
         myprint("File quotes.txt is empty")
